@@ -18,7 +18,7 @@ public class UrlController {
 
     @RequestMapping(path = "/{key}",method = RequestMethod.GET)
     @ApiResponse(responseCode = "301",description = "생성된 단축 URL입니다.")
-    public void redirect(@PathVariable long key){
+    public void redirect(@PathVariable String key){
 
     }
 
@@ -30,7 +30,7 @@ public class UrlController {
 
     @RequestMapping(path = "/keys/{key}/summary",method = RequestMethod.GET)
     @ApiResponse(responseCode = "200",description = "요청에 성공하였습니다.")
-    public void countRequest(@PathVariable long key){
+    public void countRequest(@PathVariable String key){
 
     }
 
