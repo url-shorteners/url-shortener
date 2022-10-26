@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -26,12 +28,17 @@ class Post_specs {
     @Autowired
     private TestRestTemplate client;
 
-    @Test
-    void sut_returns_bad_request_status_code_if_original_url_is_invalid() {
+    @ParameterizedTest
+    @ValueSource(strings = {
+        "This is not a URL.",
+        "hello world",
+        "htps://",
+    })
+    void sut_returns_bad_request_status_code_if_original_url_is_invalid(String invalidUrl) {
 
         // Arrange
         Map<String, Object> requestContent = new HashMap<>();
-        requestContent.put("originalUrl", "This is not a URL.");
+        requestContent.put("originalUrl", invalidUrl);
 
         // Act
         ResponseEntity<JsonNode> response = client.postForEntity(path, requestContent, JsonNode.class);
@@ -40,12 +47,18 @@ class Post_specs {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
-    @Test
-    void sut_returns_ok_status_code_if_original_url_is_valid() {
+    @ParameterizedTest
+    @ValueSource(strings = {
+        "https://github.com",
+        "http://my-site.com",
+        "http://my-site.com/some-page",
+        "http://my-site.com/some-page?x=1&s=hello",
+    })
+    void sut_returns_ok_status_code_if_original_url_is_valid(String validUrl) {
 
         // Arrange
         Map<String, Object> requestContent = new HashMap<>();
-        requestContent.put("originalUrl", "https://github.com");
+        requestContent.put("originalUrl", validUrl);
 
         // Act
         ResponseEntity<JsonNode> response = client.postForEntity(path, requestContent, JsonNode.class);
@@ -54,35 +67,35 @@ class Post_specs {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    @Test
-    void sut_returns_shorten_url_as_body_if_original_url_is_valid() {
+    // @Test
+    // void sut_returns_shorten_url_as_body_if_original_url_is_valid() {
 
-        // Arrange
-        Map<String, Object> requestContent = new HashMap<>();
-        requestContent.put("originalUrl", "https://github.com");
+    //     // Arrange
+    //     Map<String, Object> requestContent = new HashMap<>();
+    //     requestContent.put("originalUrl", "https://github.com");
 
-        // Act
-        JsonNode responseContent = client.postForObject(path, requestContent, JsonNode.class);
+    //     // Act
+    //     JsonNode responseContent = client.postForObject(path, requestContent, JsonNode.class);
 
-        // Assert
-        assertNotNull(requestContent);
-        assertTrue(responseContent.has("shortenUrl"));
-        assertNotNull(responseContent.get("shortenUrl").asText());
-    }
+    //     // Assert
+    //     assertNotNull(requestContent);
+    //     assertTrue(responseContent.has("shortenUrl"));
+    //     assertNotNull(responseContent.get("shortenUrl").asText());
+    // }
 
-    @Test
-    void sut_returns_same_shorten_url_for_same_original_urls() {
+    // @Test
+    // void sut_returns_same_shorten_url_for_same_original_urls() {
 
-        // Arrange
-        String originalUrl = "https://github.com";
+    //     // Arrange
+    //     String originalUrl = "https://github.com";
 
-        // Act
-        String shortenUrl1 = shorten(originalUrl);
-        String shortenUrl2 = shorten(originalUrl);
+    //     // Act
+    //     String shortenUrl1 = shorten(originalUrl);
+    //     String shortenUrl2 = shorten(originalUrl);
 
-        // Assert
-        assertEquals(shortenUrl1, shortenUrl2);
-    }
+    //     // Assert
+    //     assertEquals(shortenUrl1, shortenUrl2);
+    // }
 
     private String shorten(String originalUrl) {
         Map<String, Object> requestContent = new HashMap<>();
