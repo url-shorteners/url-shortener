@@ -67,35 +67,35 @@ class Post_specs {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    // @Test
-    // void sut_returns_shorten_url_as_body_if_original_url_is_valid() {
+     @Test
+     void sut_returns_shorten_url_as_body_if_original_url_is_valid() {
 
-    //     // Arrange
-    //     Map<String, Object> requestContent = new HashMap<>();
-    //     requestContent.put("originalUrl", "https://github.com");
+         // Arrange
+         Map<String, Object> requestContent = new HashMap<>();
+         requestContent.put("originalUrl", "https://github.com");
 
-    //     // Act
-    //     JsonNode responseContent = client.postForObject(path, requestContent, JsonNode.class);
+         // Act
+         JsonNode responseContent = client.postForObject(path, requestContent, JsonNode.class);
 
-    //     // Assert
-    //     assertNotNull(requestContent);
-    //     assertTrue(responseContent.has("shortenUrl"));
-    //     assertNotNull(responseContent.get("shortenUrl").asText());
-    // }
+         // Assert
+         assertNotNull(requestContent);
+         assertTrue(responseContent.has("shortenUrl"));
+         assertNotNull(responseContent.get("shortenUrl").asText());
+     }
 
-    // @Test
-    // void sut_returns_same_shorten_url_for_same_original_urls() {
+     @Test
+     void sut_returns_same_shorten_url_for_same_original_urls() {
 
-    //     // Arrange
-    //     String originalUrl = "https://github.com";
+         // Arrange
+         String originalUrl = "https://github.com";
 
-    //     // Act
-    //     String shortenUrl1 = shorten(originalUrl);
-    //     String shortenUrl2 = shorten(originalUrl);
+         // Act
+         String shortenUrl1 = shorten(originalUrl);
+         String shortenUrl2 = shorten(originalUrl);
 
-    //     // Assert
-    //     assertEquals(shortenUrl1, shortenUrl2);
-    // }
+         // Assert
+         assertEquals(shortenUrl1, shortenUrl2);
+     }
 
     private String shorten(String originalUrl) {
         Map<String, Object> requestContent = new HashMap<>();

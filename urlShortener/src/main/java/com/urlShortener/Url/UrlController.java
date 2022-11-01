@@ -18,10 +18,10 @@ public class UrlController {
     @RequestMapping(path = "/create", method = RequestMethod.POST)
     @ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.")
     @ApiResponse(responseCode = "400", description = "올바른 URL형식이 아닙니다.")
-    public ResponseEntity<Object> createUrl(@RequestBody CreateUrlCommand command) {
+    public ResponseEntity<CreateUrlCommand> createUrl(@RequestBody CreateUrlCommand command) {
         try {
             new URL(command.getOriginalUrl());
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return new ResponseEntity<>(CreateUrlCommand.builder().shortenUrl(command.getOriginalUrl()).build(), HttpStatus.OK);
         } catch (MalformedURLException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

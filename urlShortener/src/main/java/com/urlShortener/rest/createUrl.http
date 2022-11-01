@@ -1,0 +1,6 @@
+POST http://localhost:8080/shorten-url/create
+Content-Type: application/json
+
+{
+  "originalUrl": "https://github.com"
+}
